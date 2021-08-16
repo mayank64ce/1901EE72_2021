@@ -44,5 +44,5 @@ def meraki(a: list):
 
 # Driver function
 
-a = list(input().split(' '))
+a = list(input("Enter List of Numbers:").split(' '))
 meraki(a)
