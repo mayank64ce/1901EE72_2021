@@ -4,38 +4,39 @@
 """
 
 
-def meraki_helper(n: str):
-    """This method determines wether the number 'n' (in string format) is 
+def isMeraki(n):
+    """This method determines wether the number n is
     meraki number or not by comparing ASCII values of adjacent digits.
 
     Args:
-        n (str): [input number in string format]
+        n (int): [input number]
 
     Returns:
         [boolean]: [returns True iff n is meraki]
     """
-    l = len(n)
+    s = str(n)  # convert number to string for easy itaration over digits
+    l = len(s)
     for i in range(l-1):
-        if abs(ord(n[i])-ord(n[i+1])) != 1:  # ord(c) returns the ASCII value of charachter c
-            print("No", n, "is not a meraki number.")
+        if abs(int(s[i])-int(s[i+1])) != 1:
             return False
-    print("Yes", n, "is a meraki number.")
     return True
 
 
-def meraki(a: list):
+def meraki_helper(a):
     """This method counts the number of meraki and non-meraki numbers in the
         given list.
 
     Args:
-        a (list): [a list of (positive) numbers in string format]
+        a (list): [a list of (positive) numbers]
     """
     meraki_count = 0        # variable for storing count of meraki numbers
     non_meraki_count = 0    # variable for storing count of non-meraki numbers
     for x in a:
-        if meraki_helper(x):
+        if isMeraki(x):
+            print("Yes -", x, "is a meraki number.")
             meraki_count += 1
         else:
+            print("No -", x, "is not a meraki number.")
             non_meraki_count += 1
 
     print("The input list contains {} meraki and {} non meraki numbers.".format(
@@ -44,5 +45,6 @@ def meraki(a: list):
 
 # Driver function
 
-a = list(input("Enter List of Numbers:").split(' '))
-meraki(a)
+input = [12, 14, 56, 78, 98, 54, 678, 134,
+         789, 0, 7, 5, 123, 45, 76345, 98765432]
+meraki_helper(input)
