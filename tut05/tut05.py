@@ -1,3 +1,9 @@
+"""
+    @author: mayank64ce
+    Task: The following program goes through a data set containing the courses 
+    and respective grades attained by each student and generates an excel file for each particular
+    student with his/her score in each semester. 
+"""
 import os
 import csv
 import openpyxl
@@ -11,8 +17,20 @@ subjects = {}
 students = {}
 
 
-def get_subjects():
+def setup_directories():
+    """
+    This method simply sets up the output directory for the excel files
+    """
+    global CWD
+    if not os.path.isdir(os.path.join(CWD, OUTPUT_DIR)):
+        os.mkdir(os.path.join(CWD, OUTPUT_DIR))
+    return
 
+
+def get_subjects():
+    """
+    This method generates a mapping between subject code and subject name, l-t-p ,and credits
+    """
     global CWD
     file_path = os.path.join(CWD, SUBJECT_FILE)
     with open(file_path, newline='') as subject_data:
@@ -24,9 +42,13 @@ def get_subjects():
                 "ltp": row[2],
                 "crd": row[3]
             }
+    return
 
 
 def get_students():
+    """
+    This method generates a mapping between student rollno and student name
+    """
     global CWD
     file_path = os.path.join(CWD, STUDENT_FILE)
     with open(file_path, newline='') as student_data:
@@ -36,16 +58,14 @@ def get_students():
             students[row[0]] = {
                 "name": row[1]
             }
-            # break
-
-
-def setup_directories():
-    global CWD
-    if not os.path.isdir(os.path.join(CWD, OUTPUT_DIR)):
-        os.mkdir(os.path.join(CWD, OUTPUT_DIR))
+    return
 
 
 def generate_semwise():
+    """
+    This method goes through each entry in the grades dataset and creates an excel file
+    for each student and fills in semester wise grades and credits
+    """
     global CWD, OUTPUT_DIR
     output_dir = os.path.join(CWD, OUTPUT_DIR)
     with open(os.path.join(CWD, GRADES)) as grade_master:
@@ -90,8 +110,13 @@ def generate_semwise():
 
 
 def generate_overall():
+    """
+    This method creates the overall performance card of a particular student by calculating the
+    semester point index and the cumulative point index.
+    """
+    global CWD, OUTPUT_DIR
 
-    grade_map = {}
+    grade_map = {}  # this dictionary stores the grade to point index mapping
 
     grade_map["AA"] = 10
     grade_map["AB"] = 9
@@ -113,14 +138,13 @@ def generate_overall():
     grade_map["F*"] = 0
     grade_map["I*"] = 0
 
-    global CWD, OUTPUT_DIR
     output_dir = os.path.join(CWD, OUTPUT_DIR)
     for ROLLNO in students.keys():
         file = ROLLNO + ".xlsx"
 
         rollno = ['Roll No.']
         name = ['Name']
-        discipline = ['Discipline']  # need to figure out discipline
+        discipline = ['Discipline']
         semesters = ['Semester No.']
         semwise_credit = ['Semester wise Credit Taken']
         spi = ['SPI']
@@ -139,11 +163,11 @@ def generate_overall():
 
         if 'Sheet' in wb.sheetnames:
             wb['Sheet'].title = 'Overall'
-        total_sems = len(wb.sheetnames)
 
         credits_taken = 0
         total_cpi = 0
         for sem in wb.sheetnames:
+            # iterating over each semester
             if sem == 'Overall':
                 continue
             sheet = wb[sem]
@@ -157,10 +181,10 @@ def generate_overall():
                 current_weighted_sum += grade_map[sheet.cell(
                     i, 7).value] * int(sheet.cell(i, 5).value)
 
-            current_spi = current_weighted_sum / current_credits
+            current_spi = current_weighted_sum / current_credits  # calculating spi
             current_spi = round(current_spi, 2)
             total_cpi = (total_cpi * credits_taken + current_spi *
-                         current_credits) / (credits_taken + current_credits)
+                         current_credits) / (credits_taken + current_credits)  # calculating cpi
             total_cpi = round(total_cpi, 2)
             credits_taken += current_credits
 
@@ -170,6 +194,7 @@ def generate_overall():
             total_credits.append(credits_taken)
             cpi.append(total_cpi)
 
+        # finally appending the data into the overall sheet
         wb['Overall'].append(rollno)
         wb['Overall'].append(name)
         wb['Overall'].append(discipline)
@@ -183,8 +208,9 @@ def generate_overall():
     return
 
 
-setup_directories()
-get_subjects()
-get_students()
-generate_semwise()
-generate_overall()
+def generate_marksheet():
+    setup_directories()
+    get_subjects()
+    get_students()
+    generate_semwise()
+    generate_overall()
