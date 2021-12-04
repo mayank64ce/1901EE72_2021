@@ -1,0 +1,35 @@
+/* ./src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.btn-green {
+		@apply py-2 px-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75  p-1 m-1 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105 dark:text-yellow-100 dark:bg-green-700 dark:hover:bg-green-500 dark:focus:ring-green-600;
+	}
+	.btn-blue {
+		@apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75  p-1 m-1 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-105 dark:text-yellow-100 dark:bg-blue-700 dark:hover:bg-blue-500 dark:focus:ring-blue-600;
+	}
+	.h1-tag {
+		@apply flex-auto text-5xl font-semibold dark:text-yellow-100;
+	}
+	.h3-tag {
+		@apply flex-auto text-2xl font-semibold dark:text-yellow-100;
+	}
+	.classic-input {
+		@apply flex-auto justify-center rounded-md border border-gray-900  p-1 m-1 dark:bg-gray-200 dark:text-gray-800;
+	}
+	.dnd-area {
+		@apply flex-initial p-4 m-1 items-center bg-gray-100 dark:border-gray-900 rounded-lg dark:bg-gray-200 dark:text-gray-800;
+	}
+}
+
+/* body.light-mode {
+	background-color: #fff;
+	color: #333;
+	transition: background-color 0.3s ease;
+}
+body.dark-mode {
+	background-color: #1a1919;
+	color: #999;
+} */
